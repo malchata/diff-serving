@@ -1,0 +1,52 @@
+.pedal__info > h2,
+.pedal__info > p {
+  margin: 0 0 .5rem;
+  line-height: 1.618;
+}
+
+.pedal__info > h2 {
+  font-size: 1.1372251706rem;
+  font-weight: 600;
+}
+
+.pedal__info > iframe {
+  max-width: 100%;
+  border: 0;
+}
+
+.pedal__image-container {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 1rem;
+}
+
+.pedal__image-container > img {
+  position: relative;
+  z-index: 1;
+  box-shadow: .25rem .25rem .5rem rgba(5, 5, 5, .25);
+}
+
+.pedal__toggle-favorite {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #fffbfe;
+  line-height: 1;
+  cursor: pointer;
+  font-size: 1.5rem;
+  bottom: .5rem;
+  right: .5rem;
+  position: absolute;
+  z-index: 2;
+  background: #016fb9;
+  box-shadow: .125rem .125rem .5rem rgba(5, 5, 5, .25);
+  border: 0;
+}
+
+.no-js .pedal__toggle-favorite {
+  display: none;
+}
