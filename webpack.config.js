@@ -91,7 +91,35 @@ module.exports = [
           ]
         }
       ]
-    }
+    },
+    ...commonClientConfig
+  },
+  // client-modern
+  {
+    name: "client-modern",
+    output: {
+      filename: mode === "development" ? "js/[name].mjs" : "js/[name].[chunkhash:8].mjs",
+      chunkFilename: mode === "development" ? "js/[name].mjs" : "js/[name].[chunkhash:8].mjs",
+      path: dist("client"),
+      publicPath: "/"
+    },
+    module: {
+      rules: [
+        {
+          test: /\.m?js$/i,
+          exclude: /node_modules/i,
+          use: [
+            {
+              loader: "babel-loader",
+              options: {
+                envName: "clientModern"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    ...commonClientConfig
   },
   // server
   {
