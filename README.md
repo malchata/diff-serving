@@ -6,5 +6,4 @@ This repo is a step-by-step demonstration of how to implement differential servi
 - `step-1`: Update babel config to add `clientModern` environment.
 - `step-2`: Create a common config object.
 - `step-3`: Add webpack `client-modern` webpack config (this is the big part).
-- `step-4`: Configure `assets-webpack-plugin`.
-- `step-5`: Add `module`/`nomodule` code in `src/server/index.js` (including polyfill).
+- `step-4`: Add `module`/`nomodule` code in `src/server/index.js`.

@@ -1,9 +1,8 @@
-import Router from "preact-router";
 import { h, render } from "preact";
+import Router from "preact-router";
 import Search from "Components/Search";
 import PedalDetail from "Components/PedalDetail";
 import Favorites from "Components/Favorites";
-import "Styles/Global.css";
 
 render(<Router>
   <Search path="/" />

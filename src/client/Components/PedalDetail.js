@@ -3,7 +3,6 @@ import Heading from "Components/Heading";
 import BackLink from "Components/BackLink";
 import PedalImage from "Components/PedalImage";
 import { toggleFavorite, isFavorite } from "Utils";
-import "Styles/PedalDetail.css";
 
 export default class PedalDetail extends Component {
   constructor(props) {
@@ -72,21 +71,14 @@ export default class PedalDetail extends Component {
         <section className="pedal__info">
           <div className="pedal__image-container">
             <button className="pedal__toggle-favorite" onClick={this.handleToggleFavorite}>{isFavorite === true ? "-" : "+"}</button>
-            <PedalImage id={id} manufacturer={manufacturer} model={model} />
+            {id !== null ? <PedalImage id={id} manufacturer={manufacturer} model={model} /> : ""}
           </div>
           <h2>Type</h2>
           <p>{type}</p>
           <h2>Description</h2>
           <p>{copy}</p>
           <h2>Demo Video</h2>
-          <iframe
-            id="ytplayer"
-            type="text/html"
-            width="640"
-            height="360"
-            src={`https://www.youtube.com/embed/${youtube}`}
-            frameborder="0">
-          </iframe>
+          {id !== null ? <iframe id="ytplayer" type="text/html" width="640" height="360" src={`https://www.youtube.com/embed/${youtube}`} frameborder="0"></iframe> : ""}
         </section>
       </section>
     );

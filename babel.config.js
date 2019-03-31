@@ -7,8 +7,9 @@ module.exports = {
         [
           "@babel/preset-env", {
             modules: false,
+            corejs: 3,
             useBuiltIns: "usage",
-            targets: "> 0.25%, last 2 versions, Firefox ESR, not dead"
+            targets: "> 0.25%, IE > 10, Firefox ESR, not dead"
           }
         ],
         [
@@ -18,7 +19,6 @@ module.exports = {
         ]
       ],
       plugins: [
-        "@babel/plugin-transform-runtime",
         "@babel/plugin-syntax-dynamic-import"
       ]
     },

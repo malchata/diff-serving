@@ -1,6 +1,5 @@
 import { h, render } from "preact";
 import PedalImage from "Components/PedalImage";
-import "Styles/Pedal.css";
 
 export default props => {
   const { id, manufacturer, model, type } = props;

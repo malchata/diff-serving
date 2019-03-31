@@ -4,7 +4,6 @@
 const path = require("path");
 
 // webpack-specific
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const AssetsWebpackPlugin = require("assets-webpack-plugin");
 const WebpackNodeExternals = require("webpack-node-externals");
 
@@ -12,6 +11,14 @@ const WebpackNodeExternals = require("webpack-node-externals");
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
 const src = (...args) => path.join(__dirname, "src", ...args);
 const dist = (...args) => path.join(__dirname, "dist", ...args);
+
+// We need a single instance of `AssetsWebpackPlugin` so all builds share the
+// same manifest. This is essential for getting differential serving to work.
+const assetsPluginInstance = new AssetsWebpackPlugin({
+  filename: "assets.json",
+  path: dist("server"),
+  update: true
+});
 
 // webpack configs
 module.exports = [
@@ -41,7 +48,7 @@ module.exports = [
           commons: {
             name: "commons",
             chunks: "initial",
-            minChunks: 2
+            minChunks: 1
           }
         }
       }
@@ -49,15 +56,7 @@ module.exports = [
     module: {
       rules: [
         {
-          test: /\.css$/i,
-          use: [
-            MiniCssExtractPlugin.loader,
-            "css-loader",
-            "postcss-loader"
-          ],
-        },
-        {
-          test: /\.jsx?$/i,
+          test: /\.m?js$/i,
           exclude: /node_modules/i,
           use: [
             {
@@ -71,25 +70,22 @@ module.exports = [
       ]
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: path.join("css", mode === "development" ? "[name].css" : "[name].[hash:8].css")
-      }),
-      new AssetsWebpackPlugin({
-        manifestFirst: true,
-        filename: "assets.json",
-        path: dist("server")
-      })
+      assetsPluginInstance
     ],
+    // Because screen space may be at a minimum at the event, let's configure
+    // the output to be as small as possible while still outputting needed info.
     stats: {
-      exclude: /\.(m?js|css)\.map$/i,
-      excludeAssets: /\.(m?js|css)\.map$/i,
-      excludeModules: /\.(m?js|css)\.map$/i
+      exclude: /\.m?js\.map$/i,
+      excludeAssets: /\.m?js\.map$/i,
+      excludeModules: /\.m?js\.map$/i,
+      builtAt: false,
+      children: false,
+      modules: false
     },
     resolve: {
       alias: {
         "Components": src("client", "Components"),
-        "Utils": src("client", "Utils"),
-        "Styles": src("client", "Styles")
+        "Utils": src("client", "Utils")
       }
     }
   },
@@ -109,7 +105,7 @@ module.exports = [
     module: {
       rules: [
         {
-          test: /\.jsx?$/i,
+          test: /\.m?js$/i,
           exclude: /node_modules/i,
           use: [
             {
@@ -119,22 +115,23 @@ module.exports = [
               }
             }
           ]
-        },
-        {
-          test: /\.css$/i,
-          use: [
-            "null-loader"
-          ]
-        },
+        }
       ]
+    },
+    // We're not doing any work with the server during the presentation, so we
+    // don't really want to see debug info for it cluttering the screen.
+    stats: {
+      exclude: /\.m?js\.map$/i,
+      excludeAssets: /\.m?js\.map$/i,
+      excludeModules: /\.m?js\.map$/i,
+      all: false
     },
     externals: [WebpackNodeExternals(), "assets"],
     resolve: {
       alias: {
         "Components": src("client", "Components"),
         "Utils": src("client", "Utils", "index.js"),
-        "Html": src("client", "Html", "index.js"),
-        "Styles": src("client", "Styles")
+        "Html": src("client", "Html", "index.js")
       }
     }
   }

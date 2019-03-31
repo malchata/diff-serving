@@ -6,6 +6,7 @@ import { readFile } from "fs";
 
 // App-specific
 import express from "express";
+import compression from "compression";
 import bodyParser from "body-parser";
 import { pedals } from "./pedals.json";
 import Html from "Html";
@@ -19,6 +20,8 @@ import PedalDetail from "Components/PedalDetail";
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+app.use(compression());
 
 app.use(bodyParser.urlencoded({
   extended: true

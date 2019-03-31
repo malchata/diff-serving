@@ -4,7 +4,7 @@ const devMode = process.env.NODE_ENV !== "production";
 
 let plugins = [
   require("autoprefixer")({
-    browsers: ["> 0.25%", "last 2 versions", "Firefox ESR", "not dead"]
+    browsers: ["> 0.25%", "IE > 10", "Firefox ESR", "not dead"]
   })
 ];
 

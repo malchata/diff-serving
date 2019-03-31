@@ -2,7 +2,6 @@ import { h, render, Component } from "preact";
 import PedalList from "Components/PedalList";
 import Pedal from "Components/Pedal";
 import { simpleSort } from "Utils";
-import "Styles/Search.css";
 
 export default class Search extends Component {
   constructor(props) {
