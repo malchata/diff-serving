@@ -1,12 +1,16 @@
 export default function (title, body, path, assets) {
   let js = [assets.commons.js];
+  let mjs = [assets.commons.mjs];
 
   if (path.indexOf("favorites") !== -1) {
     js.push(assets.favorites.js);
+    mjs.push(assets.favorites.mjs);
   } else if (path.indexOf("pedal") !== -1) {
     js.push(assets.pedal.js);
+    mjs.push(assets.pedal.mjs);
   } else {
     js.push(assets.home.js);
+    mjs.push(assets.home.mjs);
   }
 
   return `
@@ -26,7 +30,8 @@ export default function (title, body, path, assets) {
       <body>
         <main id="app">${body}</main>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=fetch"></script>
-        ${js.map(src => `<script src=${src}></script>`).join("")}
+        ${mjs.map(src => `<script type="module" src=${src}></script>`).join("")}
+        ${js.map(src => `<script nomodule src=${src}></script>`).join("")}
       </body>
     </html>`;
 }
