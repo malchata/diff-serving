@@ -20,38 +20,61 @@ const assetsPluginInstance = new AssetsWebpackPlugin({
   update: true
 });
 
+// Options common between both legacy and modern client configs.
+const commonClientConfig = {
+  mode,
+  entry: {
+    "home": src("client", "home.js"),
+    "pedal": src("client", "pedal.js"),
+    "favorites": src("client", "favorites.js")
+  },
+  devtool: "source-map",
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /node_modules/i,
+          chunks: "all"
+        },
+        commons: {
+          name: "commons",
+          chunks: "initial",
+          minChunks: 1
+        }
+      }
+    }
+  },
+  plugins: [
+    assetsPluginInstance
+  ],
+  // Because screen space may be at a minimum at the event, let's configure
+  // the output to be as small as possible while still outputting needed info.
+  stats: {
+    exclude: /\.m?js\.map$/i,
+    excludeAssets: /\.m?js\.map$/i,
+    excludeModules: /\.m?js\.map$/i,
+    builtAt: false,
+    children: false,
+    modules: false
+  },
+  resolve: {
+    alias: {
+      "Components": src("client", "Components"),
+      "Utils": src("client", "Utils")
+    }
+  }
+};
+
 // webpack configs
 module.exports = [
   // client
   {
     name: "client",
-    mode,
-    entry: {
-      "home": src("client", "home.js"),
-      "pedal": src("client", "pedal.js"),
-      "favorites": src("client", "favorites.js")
-    },
-    devtool: "source-map",
     output: {
       filename: mode === "development" ? "js/[name].js" : "js/[name].[chunkhash:8].js",
       chunkFilename: mode === "development" ? "js/[name].js" : "js/[name].[chunkhash:8].js",
       path: dist("client"),
       publicPath: "/"
-    },
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          vendors: {
-            test: /node_modules/i,
-            chunks: "all"
-          },
-          commons: {
-            name: "commons",
-            chunks: "initial",
-            minChunks: 1
-          }
-        }
-      }
     },
     module: {
       rules: [
@@ -68,25 +91,6 @@ module.exports = [
           ]
         }
       ]
-    },
-    plugins: [
-      assetsPluginInstance
-    ],
-    // Because screen space may be at a minimum at the event, let's configure
-    // the output to be as small as possible while still outputting needed info.
-    stats: {
-      exclude: /\.m?js\.map$/i,
-      excludeAssets: /\.m?js\.map$/i,
-      excludeModules: /\.m?js\.map$/i,
-      builtAt: false,
-      children: false,
-      modules: false
-    },
-    resolve: {
-      alias: {
-        "Components": src("client", "Components"),
-        "Utils": src("client", "Utils")
-      }
     }
   },
   // server
