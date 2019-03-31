@@ -22,6 +22,26 @@ module.exports = {
         "@babel/plugin-syntax-dynamic-import"
       ]
     },
+    clientModern: {
+      presets: [
+        [
+          "@babel/preset-env", {
+            modules: false,
+            targets: {
+              esmodules: true
+            }
+          }
+        ],
+        [
+          "@babel/preset-react", {
+            pragma: "h"
+          }
+        ]
+      ],
+      plugins: [
+        "@babel/plugin-syntax-dynamic-import"
+      ]
+    },
     server: {
       presets: [
         [
