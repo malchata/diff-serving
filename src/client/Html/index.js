@@ -13,6 +13,23 @@ export default function (title, body, path, assets) {
     mjs.push(assets.home.mjs);
   }
 
+  let mjsMarkup = mjs.map(src => `
+    var script = document.createElement("script");
+    script.type = "module";
+    script.src = "${src}";
+    document.body.appendChild(script);
+    delete script;
+  `).join("");
+
+  let jsMarkup = js.map(src => `
+    var script = document.createElement("script");
+    script.src = "${src}";
+    script.async = false;
+    script.defer = true;
+    document.body.appendChild(script);
+    delete script;
+  `).join("");
+
   return `
     <!DOCTYPE html>
     <html class="no-js" lang="en" dir="ltr">
@@ -30,8 +47,13 @@ export default function (title, body, path, assets) {
       <body>
         <main id="app">${body}</main>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=fetch"></script>
-        ${mjs.map(src => `<script type="module" src=${src}></script>`).join("")}
-        ${js.map(src => `<script nomodule src=${src}></script>`).join("")}
+        <script>
+          if ("noModule" in document.createElement("script")) {
+            ${mjsMarkup}
+          } else {
+            ${jsMarkup}
+          }
+        </script>
       </body>
     </html>`;
 }
